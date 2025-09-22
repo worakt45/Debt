@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fin-Freedom: แดชบอร์ดวิเคราะห์และแก้ไขปัญหาหนี้ครัวเรือนไทย</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Clarity -->
+    <!-- Application Structure Plan: The application is designed as a narrative journey in 5 sections. 1) "The Big Picture" uses key stats and charts to establish the problem's scale. 2) "Causes" breaks down the reasons using easy-to-digest info-cards. 3) "The Vicious Cycle" visualizes the personal impact with a simple diagram. 4) "The Way Out" provides actionable solutions, split into macro and interactive micro-level tabs. 5) "Tech Solution" introduces a tangible app concept, making the proposed solution concrete. This structure guides the user from understanding the problem's complexity to seeing a clear, empowering path forward. -->
+    <!-- Visualization & Content Choices: 1) Report Info: Household Debt to GDP Trend -> Goal: Show change over time -> Viz: Line Chart -> Interaction: Hover for yearly data -> Justification: Best for time-series data clarity -> Library: Chart.js. 2) Report Info: Types of Household Debt -> Goal: Show composition -> Viz: Donut Chart -> Interaction: Hover for percentages -> Justification: Ideal for showing parts of a whole -> Library: Chart.js. 3) Report Info: Causes of debt -> Goal: Inform -> Presentation: Icon-driven cards -> Interaction: None -> Justification: Visually appealing and easy to scan. 4) Report Info: Debt Cycle -> Goal: Organize/Explain process -> Presentation: HTML/CSS Flow Diagram -> Interaction: None -> Justification: Simplifies a complex feedback loop visually. 5) Report Info: Personal Solutions -> Goal: Organize options -> Presentation: JS-powered tabs -> Interaction: Click to switch content -> Justification: Allows users to explore solutions without overwhelming them. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #FDFBF8; /* Warm Neutral */
+            color: #3C4043;
+        }
+        .nav-active {
+            color: #00796B; /* Teal Accent */
+            font-weight: 600;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-[#004D40]">
+                Fin-Freedom <span class="text-sm font-normal">| ปลดหนี้เพื่ออิสรภาพ</span>
+            </a>
+            <div class="hidden md:flex space-x-8">
+                <a href="#overview" class="text-gray-600 hover:text-[#00796B] transition duration-300">ภาพรวมปัญหา</a>
+                <a href="#causes" class="text-gray-600 hover:text-[#00796B] transition duration-300">สาเหตุ</a>
+                <a href="#solutions" class="text-gray-600 hover:text-[#00796B] transition duration-300">แนวทางแก้ไข</a>
+                <a href="#app" class="text-gray-600 hover:text-[#00796B] transition duration-300">แอปพลิเคชัน</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-600 focus:outline-none">
+                    <span class="text-3xl">☰</span>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-6 pb-4">
+            <a href="#overview" class="block py-2 text-gray-600 hover:text-[#00796B]">ภาพรวมปัญหา</a>
+            <a href="#causes" class="block py-2 text-gray-600 hover:text-[#00796B]">สาเหตุ</a>
+            <a href="#solutions" class="block py-2 text-gray-600 hover:text-[#00796B]">แนวทางแก้ไข</a>
+            <a href="#app" class="block py-2 text-gray-600 hover:text-[#00796B]">แอปพลิเคชัน</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-16">
+
+        <section id="overview" class="mb-20 text-center scroll-mt-20">
+            <h1 class="text-4xl md:text-5xl font-bold text-[#004D40] mb-4">สถานการณ์หนี้ครัวเรือนไทย</h1>
+            <p class="max-w-3xl mx-auto text-lg text-gray-700 mb-12">
+                หนี้ครัวเรือนเป็นหนึ่งในความท้าทายเชิงโครงสร้างที่สำคัญของเศรษฐกิจไทยมายาวนาน ส่งผลกระทบต่อเสถียรภาพทางการเงิน ความสามารถในการใช้จ่าย และคุณภาพชีวิตของประชาชนในวงกว้าง ส่วนนี้จะแสดงภาพรวมของสถานการณ์ปัจจุบันผ่านข้อมูลและสถิติสำคัญ
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                    <h3 class="text-xl font-semibold text-gray-500 mb-2">มูลค่าหนี้ครัวเรือน</h3>
+                    <p class="text-4xl font-bold text-[#00796B]">16.9</p>
+                    <p class="text-gray-500">ล้านล้านบาท</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                    <h3 class="text-xl font-semibold text-gray-500 mb-2">สัดส่วนต่อ GDP</h3>
+                    <p class="text-4xl font-bold text-[#00796B]">>91%</p>
+                    <p class="text-gray-500">สูงเป็นอันดับต้นๆ ของเอเชีย</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                    <h3 class="text-xl font-semibold text-gray-500 mb-2">หนี้เสีย (NPL)</h3>
+                    <p class="text-4xl font-bold text-[#D32F2F]">~2.7%</p>
+                    <p class="text-gray-500">และมีแนวโน้มเพิ่มขึ้น</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-100">
+                    <h2 class="text-2xl font-bold mb-4 text-left">แนวโน้มหนี้ครัวเรือนต่อ GDP</h2>
+                    <div class="chart-container">
+                        <canvas id="debtTrendChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-100">
+                    <h2 class="text-2xl font-bold mb-4 text-left">องค์ประกอบของหนี้</h2>
+                     <div class="chart-container flex items-center justify-center">
+                        <canvas id="debtCompositionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="causes" class="mb-20 scroll-mt-20">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold text-[#004D40] mb-4">เจาะลึกสาเหตุของปัญหา</h1>
+                <p class="max-w-3xl mx-auto text-lg text-gray-700">ปัญหาหนี้ครัวเรือนที่เรื้อรังเกิดจากปัจจัยที่ซับซ้อนหลายมิติ ทั้งจากสภาวะเศรษฐกิจ พฤติกรรมทางการเงิน และโครงสร้างสังคม</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 transform hover:-translate-y-2 transition-transform duration-300">
+                    <div class="text-3xl text-[#00796B] mb-4">💰</div>
+                    <h3 class="text-xl font-bold mb-2">รายได้ไม่พอรายจ่าย</h3>
+                    <p class="text-gray-600">ค่าครองชีพที่สูงขึ้นสวนทางกับรายได้ที่เติบโตไม่ทัน ทำให้ต้องพึ่งพาการกู้ยืมเพื่อใช้จ่ายในชีวิตประจำวัน</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 transform hover:-translate-y-2 transition-transform duration-300">
+                    <div class="text-3xl text-[#00796B] mb-4">💳</div>
+                    <h3 class="text-xl font-bold mb-2">การเข้าถึงสินเชื่อง่าย</h3>
+                    <p class="text-gray-600">การแข่งขันของสถาบันการเงินและโปรโมชันต่างๆ ทำให้เกิดการก่อหนี้ได้ง่ายเกินความสามารถในการชำระคืน</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 transform hover:-translate-y-2 transition-transform duration-300">
+                    <div class="text-3xl text-[#00796B] mb-4">📚</div>
+                    <h3 class="text-xl font-bold mb-2">ขาดความรู้ทางการเงิน</h3>
+                    <p class="text-gray-600">การขาดความเข้าใจในการวางแผนการเงิน การออม และการลงทุน ทำให้ตัดสินใจทางการเงินผิดพลาดและนำไปสู่การเป็นหนี้</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 transform hover:-translate-y-2 transition-transform duration-300">
+                    <div class="text-3xl text-[#00796B] mb-4">📉</div>
+                    <h3 class="text-xl font-bold mb-2">ผลกระทบจากวิกฤตเศรษฐกิจ</h3>
+                    <p class="text-gray-600">การชะลอตัวของเศรษฐกิจหรือเหตุการณ์ไม่คาดฝัน เช่น COVID-19 ทำให้รายได้ลดลง แต่ภาระหนี้ยังคงเท่าเดิม</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 transform hover:-translate-y-2 transition-transform duration-300">
+                    <div class="text-3xl text-[#00796B] mb-4">🏘️</div>
+                    <h3 class="text-xl font-bold mb-2">หนี้เพื่อการบริโภคเกินจำเป็น</h3>
+                    <p class="text-gray-600">ค่านิยมทางสังคมและความต้องการสินค้าฟุ่มเฟือย ทำให้เกิดการก่อหนี้ที่ไม่สร้างรายได้ในอนาคต</p>
+                </div>
+                 <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 transform hover:-translate-y-2 transition-transform duration-300">
+                    <div class="text-3xl text-[#D32F2F] mb-4">🦈</div>
+                    <h3 class="text-xl font-bold mb-2">ปัญหาหนี้นอกระบบ</h3>
+                    <p class="text-gray-600">เมื่อไม่สามารถเข้าถึงสินเชื่อในระบบได้ ประชาชนบางส่วนหันไปพึ่งพาหนี้นอกระบบที่มีดอกเบี้ยสูงและเงื่อนไขไม่เป็นธรรม</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="solutions" class="mb-20 scroll-mt-20">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold text-[#004D40] mb-4">ทางออก.. สู่อิสรภาพทางการเงิน</h1>
+                <p class="max-w-3xl mx-auto text-lg text-gray-700">การแก้ปัญหาหนี้ต้องอาศัยความร่วมมือจากทุกภาคส่วน ทั้งมาตรการระดับนโยบายจากภาครัฐ และการปรับเปลี่ยนพฤติกรรมในระดับบุคคล</p>
+            </div>
+            <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-100">
+                <div class="flex flex-col md:flex-row border-b border-gray-200">
+                    <button id="tab-macro" class="tab-button py-4 px-6 block w-full md:w-auto text-lg font-semibold border-b-4 border-[#00796B] text-[#00796B]">แนวทางระดับมหภาค</button>
+                    <button id="tab-micro" class="tab-button py-4 px-6 block w-full md:w-auto text-lg font-semibold border-b-4 border-transparent text-gray-500 hover:text-[#00796B]">แนวทางระดับบุคคล</button>
+                </div>
+
+                <div id="content-macro" class="tab-content py-8">
+                    <h3 class="text-2xl font-bold mb-6">มาตรการจากภาครัฐและสถาบันการเงิน</h3>
+                    <ul class="space-y-4 text-gray-700">
+                        <li class="flex items-start">
+                            <span class="text-green-600 text-2xl mr-3">✓</span>
+                            <div><strong>การปรับโครงสร้างหนี้:</strong> ช่วยเหลือลูกหนี้ที่มีปัญหาให้สามารถกลับมาชำระหนี้ได้ตามศักยภาพ</div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-600 text-2xl mr-3">✓</span>
+                            <div><strong>กำกับดูแลการให้สินเชื่อ:</strong> ออกเกณฑ์การให้สินเชื่อที่รับผิดชอบและเป็นธรรม (Responsible Lending)</div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-600 text-2xl mr-3">✓</span>
+                            <div><strong>ส่งเสริมการออมและการลงทุน:</strong> สร้างแรงจูงใจและให้ความรู้เพื่อสร้างความมั่นคงทางการเงินในระยะยาว</div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-600 text-2xl mr-3">✓</span>
+                             <div><strong>แก้ปัญหาหนี้นอกระบบ:</strong> เพิ่มการเข้าถึงสินเชื่อในระบบและจัดการผู้ให้กู้นอกระบบที่ผิดกฎหมายอย่างจริงจัง</div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div id="content-micro" class="tab-content py-8 hidden">
+                    <h3 class="text-2xl font-bold mb-6">3 ขั้นตอนจัดการหนี้ด้วยตัวเอง</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-[#F1F8E9] p-6 rounded-lg">
+                            <div class="text-3xl mb-2">1️⃣</div>
+                            <h4 class="font-bold text-xl mb-2 text-[#33691E]">สำรวจและวางแผน</h4>
+                            <p>จดบันทึกรายรับ-รายจ่าย และสรุปภาระหนี้ทั้งหมดเพื่อทำความเข้าใจสถานการณ์การเงินของตนเองอย่างแท้จริง</p>
+                        </div>
+                        <div class="bg-[#E3F2FD] p-6 rounded-lg">
+                            <div class="text-3xl mb-2">2️⃣</div>
+                            <h4 class="font-bold text-xl mb-2 text-[#0D47A1]">ลดรายจ่าย เพิ่มรายได้</h4>
+                            <p>ตัดรายจ่ายที่ไม่จำเป็น และมองหาช่องทางสร้างรายได้เสริม เพื่อให้มีเงินเหลือสำหรับชำระหนี้มากขึ้น</p>
+                        </div>
+                        <div class="bg-[#FFF3E0] p-6 rounded-lg">
+                             <div class="text-3xl mb-2">3️⃣</div>
+                            <h4 class="font-bold text-xl mb-2 text-[#E65100]">เจรจาและชำระหนี้</h4>
+                            <p>ติดต่อสถาบันการเงินเพื่อขอปรับโครงสร้างหนี้ และเลือกวิธีชำระหนี้ที่เหมาะสม เช่น Snowball หรือ Avalanche</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="app" class="scroll-mt-20">
+             <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold text-[#004D40] mb-4">เทคโนโลยีเพื่อทางออก: แอปพลิเคชัน "Fin-Freedom"</h1>
+                <p class="max-w-3xl mx-auto text-lg text-gray-700">เราเสนอแนวคิดในการใช้เทคโนโลยีเพื่อสร้างเครื่องมือที่ช่วยให้ทุกคนสามารถจัดการหนี้สินและวางแผนการเงินได้อย่างมีประสิทธิภาพและเข้าถึงง่าย</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-2xl overflow-hidden border border-gray-100">
+                <div class="bg-gradient-to-r from-[#00796B] to-[#004D40] p-8 text-white">
+                    <h2 class="text-3xl font-bold">Fin-Freedom: เพื่อนคู่คิดพิชิตหนี้</h2>
+                    <p>แอปพลิเคชันที่ออกแบบมาเพื่อเป็นผู้ช่วยส่วนตัวทางการเงินของคุณ</p>
+                </div>
+                <div class="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="feature-card">
+                        <div class="text-4xl mb-3">📊</div>
+                        <h3 class="text-xl font-bold mb-2">แดชบอร์ดสรุปหนี้</h3>
+                        <p class="text-gray-600">เห็นภาพรวมหนี้สินทั้งหมดในที่เดียว ติดตามยอดคงเหลือ และดูความคืบหน้าในการปลดหนี้</p>
+                    </div>
+                     <div class="feature-card">
+                        <div class="text-4xl mb-3">📝</div>
+                        <h3 class="text-xl font-bold mb-2">วางแผนงบประมาณอัจฉริยะ</h3>
+                        <p class="text-gray-600">บันทึกรายรับ-รายจ่าย พร้อมระบบช่วยวิเคราะห์และแนะนำการลดค่าใช้จ่ายที่ไม่จำเป็น</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="text-4xl mb-3">🎯</div>
+                        <h3 class="text-xl font-bold mb-2">สร้างแผนปลดหนี้ส่วนตัว</h3>
+                        <p class="text-gray-600">เลือกลำดับการชำระหนี้ (เช่น จ่ายก้อนดอกเบี้ยสูงก่อน) และให้แอปช่วยคำนวณและติดตามเป้าหมาย</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="text-4xl mb-3">💡</div>
+                        <h3 class="text-xl font-bold mb-2">คลังความรู้การเงิน</h3>
+                        <p class="text-gray-600">บทความและวิดีโอสั้นๆ ที่ย่อยง่าย ช่วยเสริมสร้างวินัยและทักษะทางการเงินให้แข็งแกร่ง</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="text-4xl mb-3">🤝</div>
+                        <h3 class="text-xl font-bold mb-2">ข้อมูลช่วยเหลือจากภาครัฐ</h3>
+                        <p class="text-gray-600">รวบรวมข้อมูลโครงการช่วยเหลือลูกหนี้ต่างๆ เช่น คลินิกแก้หนี้ เพื่อให้คุณไม่พลาดโอกาส</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="text-4xl mb-3">🚀</div>
+                        <h3 class="text-xl font-bold mb-2">จำลองสถานการณ์</h3>
+                        <p class="text-gray-600">ลองวางแผนจ่ายเงินเพิ่มในแต่ละเดือน เพื่อดูว่าจะสามารถปลดหนี้ได้เร็วขึ้นแค่ไหน</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-20">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p>&copy; 2025 Fin-Freedom. สร้างสรรค์ขึ้นเพื่อนำเสนอแนวทางการแก้ปัญหาหนี้ครัวเรือนไทย</p>
+            <p class="text-sm text-gray-400 mt-2">ข้อมูลที่แสดงเป็นข้อมูลจำลองเพื่อการสาธิตเท่านั้น</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            const debtTrendData = {
+                labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024'],
+                datasets: [{
+                    label: 'สัดส่วนหนี้ครัวเรือนต่อ GDP (%)',
+                    data: [78.7, 80.2, 89.7, 90.1, 90.6, 91.3, 91.5],
+                    fill: true,
+                    backgroundColor: 'rgba(0, 121, 107, 0.1)',
+                    borderColor: '#00796B',
+                    tension: 0.4,
+                    pointBackgroundColor: '#00796B',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#00796B'
+                }]
+            };
+
+            const debtTrendCtx = document.getElementById('debtTrendChart').getContext('2d');
+            new Chart(debtTrendCtx, {
+                type: 'line',
+                data: debtTrendData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                             min: 75,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const debtCompositionData = {
+                labels: ['สินเชื่อส่วนบุคคล', 'บัตรเครดิต', 'เช่าซื้อรถยนต์', 'ที่อยู่อาศัย', 'อื่นๆ'],
+                datasets: [{
+                    label: 'ประเภทหนี้',
+                    data: [25, 10, 15, 35, 15],
+                    backgroundColor: [
+                        '#00796B',
+                        '#4DB6AC',
+                        '#FFB74D',
+                        '#81C784',
+                        '#BDBDBD'
+                    ],
+                    hoverOffset: 4
+                }]
+            };
+
+            const debtCompositionCtx = document.getElementById('debtCompositionChart').getContext('2d');
+            new Chart(debtCompositionCtx, {
+                type: 'doughnut',
+                data: debtCompositionData,
+                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                 label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.id.replace('tab-', 'content-');
+
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('border-[#00796B]', 'text-[#00796B]');
+                        btn.classList.add('border-transparent', 'text-gray-500');
+                    });
+                    
+                    button.classList.add('border-[#00796B]', 'text-[#00796B]');
+                    button.classList.remove('border-transparent', 'text-gray-500');
+
+                    tabContents.forEach(content => {
+                        if (content.id === targetId) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>
